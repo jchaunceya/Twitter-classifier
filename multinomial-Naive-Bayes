@@ -15,20 +15,21 @@ import time
 
 from http.client import IncompleteRead
 
-counter = 0
 access_token = 'access_token goes here'
 access_token_secret = 'access_token_secret goes here'
 consumer_key = 'consumer_key goes here'
 consumer_secret = 'consumer_secret goes here'
 
 buffer = queue.Queue()
-counter = 0
 
+rtCounter = 0
+counters = [0, 0, 0]
+rtCounters = [0,0,0]
 config = {
-    'user': 'python_db',
-    'password': 'molly',
-    'host': 'localhost',
-    'database': 'tweetstorage',
+    'user': 'db_user',
+    'password': 'db_password',
+    'host': 'db_host',
+    'database': 'db_name',
 }
 
 # Each class object recieves all class training tweets, a copy of
@@ -46,29 +47,29 @@ config = {
 
 class class_object:
     def __init__(self, class_docs, all_vocab, class_num):
-        self.doc_length = []
+        self._doc_length = []
         self.class_num = class_num
         self.class_docs = class_docs
-        self.num_docs = len(class_docs)
-        self.class_tokens = []
+        self._num_docs = len(class_docs)
+        self._class_tokens = []
         for document in class_docs:
-            self.class_tokens += nltk.word_tokenize(document)
-            self.doc_length.append(len(nltk.word_tokenize(document)))
-        self.num_words = len(self.class_tokens)
-        self.vocab = set(self.class_tokens)
+            self._class_tokens += nltk.word_tokenize(document)
+            self._doc_length.append(len(nltk.word_tokenize(document)))
+        self.num_words = len(self._class_tokens)
+        self.vocab = set(self._class_tokens)
         self.vocab_length = len(self.vocab)
         self.all_vocab = all_vocab
 
         self.freq_dist = {}
 
         for word in self.vocab:
-            self.freq_dist[word] = self.class_tokens.count(word)
+            self.freq_dist[word] = self._class_tokens.count(word)
 
-        self.stddev = statistics.stdev(self.doc_length)
-        self.mean = statistics.mean(self.doc_length)
+        self.stddev = statistics.stdev(self._doc_length)
+        self.mean = statistics.mean(self._doc_length)
 
     def return_num_docs(self):
-        return self.num_docs
+        return self._num_docs
 
     def return_word_count(self, word):
         if word in self.freq_dist:
@@ -76,7 +77,7 @@ class class_object:
         return 0
 
     def return_class_tokens(self):
-        return self.class_tokens
+        return self._class_tokens
 
     def return_product(self, document):
         product = 1
@@ -147,7 +148,8 @@ class classifier:
         # return (((self.return_doc_prob_class(document, class_obj)) * (self.return_class_frac(class_obj))) / (
         # self.return_document_probability(document)))
 
-
+    # Trying to avoid conditional branching, in an effort to increase performance 
+    # Returns list index - the number representing class
 
     def make_prediction(self, document):
         document = nltk.word_tokenize(document)
@@ -156,11 +158,6 @@ class classifier:
         pred_list.append(self.return_given_doc_prob_class(document, self.pos_obj))
         pred_list.append(self.return_given_doc_prob_class(document, self.neg_obj))
         return pred_list.index(max(pred_list))
-
-counter = 0
-rtCounter = 0
-counters = [0, 0, 0]
-rtCounters = [0,0,0]
 
 def read_buff(obj_wrap):
     global buffer
@@ -192,6 +189,7 @@ def write_pred(obj_wrap):
     bufreadSix = threading.Thread(target=read_buff, args=(obj_wrap,))
     bufreadSeven = threading.Thread(target=read_buff, args=(obj_wrap,))
     bufreadEight = threading.Thread(target=read_buff, args=(obj_wrap,))
+    
     bufreadOne.start()
     bufreadTwo.start()
     bufreadThree.start()
@@ -214,7 +212,6 @@ def write_pred(obj_wrap):
     rtCounters = [0, 0, 0]
     global buffer
 
-
     while buffer.qsize() < 10000:
         # buffer should never have more than 10000 tweets at once.
         # if it does, something is wrong
@@ -223,7 +220,9 @@ def write_pred(obj_wrap):
         now = datetime.datetime.utcnow()
 
         print("buffer size: \t\t" +  str(buffer.qsize()))
-        dateobject = dataObject(counters[1], counters[2], counters[0],counter, rtCounters[1], rtCounters[2], rtCounters[0])
+        dateobject = dataObject(counters[1], counters[2], counters[0],
+                                counter, 
+                                rtCounters[1], rtCounters[2], rtCounters[0])
 
         print("num retweets: \t" + str(rtCounter))
         print("percent retweets:\t" + str((100 * rtCounter)/counter))
@@ -234,13 +233,13 @@ def write_pred(obj_wrap):
         print("num neg:\t\t" + str(counters[0]))
         print("num neu:\t\t" + str(counters[2]))
 
-
-
         insertob.insert_into_db(dateobject)
         counters = [0, 0, 0]
         counter = 0
         rtCounter = 0
         rtCounters = [0, 0, 0]
+        
+    print("buffer exceeded max size")
 
 
 
@@ -258,10 +257,6 @@ class MyStreamListener(tweepy.StreamListener):
 
         if status == 420:  # if Twitter rejects connection, close program
             sys.exit()
-
-    def counter_inc(self):
-        global counter
-        counter += 1
 
     def on_disconnect(self, notice):
         print(notice)

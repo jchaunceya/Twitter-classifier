@@ -204,7 +204,7 @@ def write_pred(obj_wrap):
     global rtCounter
     global counters
 
-    insertob = dbInsertOb()
+    insertob = DBInsertOb()
     now = datetime.datetime.utcnow()
     rtCounter = 0
     counter = 0
@@ -220,7 +220,7 @@ def write_pred(obj_wrap):
         now = datetime.datetime.utcnow()
 
         print("buffer size: \t\t" +  str(buffer.qsize()))
-        dateobject = dataObject(counters[1], counters[2], counters[0],
+        dateobject = DataObject(counters[1], counters[2], counters[0],
                                 counter, 
                                 rtCounters[1], rtCounters[2], rtCounters[0])
 
@@ -262,7 +262,7 @@ class MyStreamListener(tweepy.StreamListener):
         print(notice)
 
 
-class dataObject:
+class DataObject:
     def __init__(self, pos, neg, neu, neg_rt, pos_rt, neu_rt, total_num):
         self.pos_num = pos
         self.neu_num = neu
@@ -274,7 +274,7 @@ class dataObject:
         self.time_of = str(datetime.datetime.utcnow())
 
 
-class dbInsertOb:
+class DBInsertOb:
     def __init__(self):
         self.num_entries = 0
         try:
@@ -304,7 +304,7 @@ class dbInsertOb:
         #print(self.cursor.getlastrowid())
 
 
-def startTwitterStream():
+def start_twitter_stream():
     print("stream started")
     while True:
         try:
@@ -324,7 +324,7 @@ if __name__ == '__main__':
     bufreadOne = threading.Thread(target=write_pred, args=(objlist1,))
 
 
-    streamThread = threading.Thread(target=startTwitterStream, args=())
+    streamThread = threading.Thread(target=start_twitter_stream, args=())
 
     bufreadOne.start()
 

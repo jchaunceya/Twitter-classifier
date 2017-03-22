@@ -15,3 +15,8 @@ Python 3.5 packages installed:
        numpy
        scipy
        scikit-learn
+
+To use:
+   
+   1. Get Twitter API authentication
+   2. Create database,

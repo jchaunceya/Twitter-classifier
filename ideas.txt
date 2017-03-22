@@ -22,3 +22,32 @@ how do we determine whether text describes a current event or past?
 Classification is supervised learning 
 	       observations are analyzed into a set of quantifiable properties
 	       
+Feature vectors:	
+
+	["past", "present"]
+	["low-income", "medium-income", "high-income"]
+	["university", "college", "community college"]
+
+information:
+
+	date
+	university
+	nature of event?
+
+Data we can actually collect from tweets:
+     text
+     user -> their tweets,location,all json info -> their follows/followers
+     location
+     time 
+     retweeted_status
+
+MySQL : storing tweets?
+
+      text,usr,location,time,university ... 
+
+MySQL:
+
+      CREATE DATABASE tweets
+      CREATE TABLE IF NOT EXISTS( 
+      	     id INT NOT NULL AUTO_INCREMENT,
+	     ...

@@ -1,0 +1,24 @@
+22/3/17
+
+How do we (semi) accurately determine 
+what do we want to know?
+     that a recruiting event HAPPENED at a high school
+     	  not discussion
+	  modals / imperatives 
+
+how do we determine whether text describes a current event or past?
+    training data of current events
+    training data of past events?
+    	     classify into current and past events
+
+	     easy - binomial classifier
+	     	  past
+		  present
+	     hard - multinomial       
+	     	  simple past
+		  simple present
+	     	  mixed - how do we extract what we need to know?
+
+Classification is supervised learning 
+	       observations are analyzed into a set of quantifiable properties
+	       

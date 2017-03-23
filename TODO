@@ -1,3 +1,7 @@
 Input your API information in secrets/secrets.py
 Run SQL script/Create database
 Enter MySQL connecting information on classifier/sent.py
+
+how to store information???
+
+How do we accurately determine 

@@ -7,18 +7,19 @@ import queue, threading, math
 import sys
 
 import tweetcleaner
-import mysql.connector
 
 import datetime
-import mysql.connector
+import MySQLdb
 import time
 
 from http.client import IncompleteRead
 
-access_token = 'access_token goes here'
-access_token_secret = 'access_token_secret goes here'
-consumer_key = 'consumer_key goes here'
-consumer_secret = 'consumer_secret goes here'
+import api_secrets
+
+access_token = api_secrets.access_token
+access_token_secret = api_secrets.access_token_secret
+consumer_key = api_secrets.consumer_key
+consumer_secret = api_secrets.consumer_secret
 
 buffer = queue.Queue()
 

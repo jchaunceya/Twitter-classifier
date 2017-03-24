@@ -1,0 +1,7 @@
+1,donald trump is our president get over it #maga
+0,donald trump is not our president #russiahack #russia #putin
+
+when sent is slightly neg, but predictor is pos: go with predictor, pos
+when both sent and predictor are negative, go neg
+when sent is pos, predictor is neg: go neg
+when sent is pos, predictor is pos: go

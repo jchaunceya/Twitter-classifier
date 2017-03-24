@@ -12,14 +12,14 @@ import datetime
 import MySQLdb
 import time
 
-from http.client import IncompleteRead
 
-import api_secrets
 
-access_token = api_secrets.access_token
-access_token_secret = api_secrets.access_token_secret
-consumer_key = api_secrets.consumer_key
-consumer_secret = api_secrets.consumer_secret
+import secrets
+
+access_token = secrets.access_token
+access_token_secret = secrets.access_token_secret
+consumer_key = secrets.consumer_key
+consumer_secret = secrets.consumer_secret
 
 buffer = queue.Queue()
 

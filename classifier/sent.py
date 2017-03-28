@@ -15,11 +15,10 @@ import time
 
 
 import secrets
-
-access_token = secrets.access_token
-access_token_secret = secrets.access_token_secret
-consumer_key = secrets.consumer_key
-consumer_secret = secrets.consumer_secret
+access_token = secrets.access_token()
+access_token_secret = secrets.access_token_secret()
+consumer_key = secrets.consumer_key()
+consumer_secret = secrets.consumer_secret()
 
 buffer = queue.Queue()
 
@@ -279,12 +278,12 @@ class DBInsertOb:
     def __init__(self):
         self.num_entries = 0
         try:
-            self.db = mysql.connector.connect(**config)
+            self.db = MySQLdb.connect(**config)
             self.cursor = self.db.cursor()
 
             print('connection successful')
 
-        except mysql.connector.Error as err:
+        except MySQLdb.MySQLError as err:
             print("Unable to connect: {}".format(err))
             sys.exit()
 
@@ -310,7 +309,7 @@ def start_twitter_stream():
     while True:
         try:
             stream.filter(track=['trump'], languages=['en'])
-        except IncompleteRead:
+        except:
             continue
 
 if __name__ == '__main__':
@@ -318,7 +317,7 @@ if __name__ == '__main__':
     auth = OAuthHandler(consumer_key, consumer_secret)
     auth.set_access_token(access_token, access_token_secret)
     stream = tweepy.Stream(auth, l)
-    train_docs = 'data/training_data.txt'
+    train_docs = '../data/trump_data_3.txt'
 
     objlist1 = classifier(train_docs)
 

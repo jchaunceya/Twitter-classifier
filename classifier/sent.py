@@ -45,7 +45,7 @@ config = {
 # including the number of documents, the number of tokens of each word, and more.
 # This is the information that the algorithm references when trying to classify a new tweet.
 
-class class_object:
+class Class_Object:
     def __init__(self, class_docs, all_vocab, class_num):
         self._doc_length = []
         self.class_num = class_num
@@ -98,7 +98,7 @@ class class_object:
         return (exp / denom)
 
 
-class classifier:
+class Classifier:
     def __init__(self, filepath):
         list_docs = [[], [], []]
         alldocs = []
@@ -319,7 +319,7 @@ if __name__ == '__main__':
     stream = tweepy.Stream(auth, l)
     train_docs = '../data/trump_data_3.txt'
 
-    objlist1 = classifier(train_docs)
+    objlist1 = Classifier(train_docs)
 
     bufreadOne = threading.Thread(target=write_pred, args=(objlist1,))
 
